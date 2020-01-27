@@ -1,5 +1,6 @@
 import csv
 import io
+import json
 import yaml
 from abc import ABC, abstractmethod
 
@@ -35,6 +36,39 @@ class Serializer(ABC):
     @abstractmethod
     def deserialize(self, value: str) -> object:
         raise NotImplementedError()
+
+
+class JsonSerializer(Serializer, formats="json"):
+    def __init__(self):
+        super().__init__()
+
+    def serialize(self, value: object) -> str:
+        return json.dumps(value)
+
+    def deserialize(self, value: str) -> object:
+        try:
+            return json.loads(value)
+        except json.decoder.JSONDecodeError as exc:
+            raise DeserializationError(exc)
+
+
+class JsonLinesSerializer(Serializer, formats="json_lines"):
+    def __init__(self):
+        super().__init__()
+
+    def serialize(self, value: object) -> str:
+        if isinstance(value, dict):
+            return json.dumps(value)
+        elif isinstance(value, list):
+            return "\n".join([json.dumps(item) for item in value])
+        else:
+            raise SerializationError()
+
+    def deserialize(self, value: str) -> object:
+        try:
+            return [json.loads(line) for line in value.split("\n")]
+        except json.decoder.JSONDecodeError as exc:
+            raise DeserializationError(exc)
 
 
 class YamlSerializer(Serializer, formats=("yml", "yaml")):
