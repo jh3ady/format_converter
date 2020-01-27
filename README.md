@@ -14,3 +14,4 @@ format_converter -i "<input_file>" -if "<input_type>" -o "<output_file>" -of "<o
 
 Formats available:
 * csv
+* yml, yaml

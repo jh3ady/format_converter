@@ -1,5 +1,6 @@
 import csv
 import io
+import yaml
 from abc import ABC, abstractmethod
 
 
@@ -34,6 +35,17 @@ class Serializer(ABC):
     @abstractmethod
     def deserialize(self, value: str) -> object:
         raise NotImplementedError()
+
+
+class YamlSerializer(Serializer, formats=("yml", "yaml")):
+    def __init__(self):
+        super().__init__()
+
+    def serialize(self, value: object) -> str:
+        return yaml.safe_dump(value)
+
+    def deserialize(self, value: str) -> object:
+        return yaml.safe_load(value)
 
 
 class CsvSerializer(Serializer, formats="csv"):
