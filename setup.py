@@ -9,4 +9,9 @@ setup(
     author="Jean-Denis VIDOT",
     author_email="contact@jdevelop.io",
     description="",
+    entry_points={
+        "console_scripts": [
+            "format_converter = format_converter.cli:convert"
+        ]
+    }
 )
