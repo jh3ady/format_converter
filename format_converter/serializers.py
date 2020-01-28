@@ -90,12 +90,16 @@ class CsvSerializer(Serializer, formats="csv"):
         fd = io.StringIO()
         if isinstance(value, dict):
             fieldnames = value.keys()
-            writer = csv.DictWriter(fd, fieldnames=fieldnames, quoting=csv.QUOTE_NONNUMERIC)
+            writer = csv.DictWriter(
+                fd, fieldnames=fieldnames, quoting=csv.QUOTE_NONNUMERIC
+            )
             writer.writeheader()
             writer.writerow(value)
         elif isinstance(value, list) and len(value) > 0 and isinstance(value[0], dict):
             fieldnames = value[0].keys()
-            writer = csv.DictWriter(fd, fieldnames=fieldnames, quoting=csv.QUOTE_NONNUMERIC)
+            writer = csv.DictWriter(
+                fd, fieldnames=fieldnames, quoting=csv.QUOTE_NONNUMERIC
+            )
             writer.writeheader()
             writer.writerows(value)
         else:
@@ -112,4 +116,3 @@ class CsvSerializer(Serializer, formats="csv"):
             items.append({column: row[column] for column in row})
 
         return items
-
